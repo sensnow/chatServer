@@ -1,0 +1,29 @@
+Index: src/main/java/com/szuzjl/service/Impl/ChatGptRequestImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/szuzjl/service/Impl/ChatGptRequestImpl.java b/src/main/java/com/szuzjl/service/Impl/ChatGptRequestImpl.java
+--- a/src/main/java/com/szuzjl/service/Impl/ChatGptRequestImpl.java	
++++ b/src/main/java/com/szuzjl/service/Impl/ChatGptRequestImpl.java	(date 1680366245414)
+@@ -11,6 +11,7 @@
+ import java.io.*;
+ import java.net.HttpURLConnection;
+ import java.net.URL;
++import java.util.ArrayList;
+ import java.util.Arrays;
+ import java.util.List;
+ 
+@@ -32,8 +33,10 @@
+                     "                \"top_p\": 1," +
+                     "                \"n\": 1" +
+                     "            }", GptData.class);
+-            List<Message> messages = Arrays.asList(new Message(msg, "user1"));
+-            gptData.setMessages(msg);
++            List<Message> messages = new ArrayList<>();
++            messages.add(new Message("system", "你是一个有用的助手"));
++            messages.add(new Message("user", "你好"));
++            gptData.setMessages(messages);
+             URL url = new URL(api);
+             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+             httpURLConnection.setRequestMethod("POST");
