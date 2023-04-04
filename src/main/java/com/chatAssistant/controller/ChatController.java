@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * 聊天处理器
+ */
 @RestController
 @RequestMapping("/chat")
 public class ChatController {
@@ -19,6 +22,11 @@ public class ChatController {
     @Autowired
     private ChatGptService chatService;
 
+    /**
+     * 获取聊天内容
+     * @param messages 消息列表
+     * @return 聊天内容
+     */
     @PostMapping("")
     public Result<Message> getChat(@RequestBody List<Message> messages){
         Message chat = chatService.getChat(messages);

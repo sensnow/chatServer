@@ -1,14 +1,15 @@
 package com.chatAssistant.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.chatAssistant.domain.User;
 import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 @Mapper
-public interface UserMapper {
+public interface UserMapper extends BaseMapper<User> {
 
-    @ResultMap("UserResultMap")
-    @Select("select * from user where userName = #{userName} and password = #{password}")
+/*    @ResultMap("UserResultMap")
+    @Select("select * from user where user = #{userName} and password = #{password}")
     public User login(String userName, String password);
 
     @ResultMap("UserResultMap")
@@ -25,6 +26,6 @@ public interface UserMapper {
 
     @ResultMap("UserResultMap")
     @Insert("insert into user(userName,password) values(#{userName},#{password})")
-    public int insertUser(String userName, String password);
+    public int insertUser(String userName, String password);*/
 
 }

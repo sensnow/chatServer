@@ -1,20 +1,33 @@
 package com.chatAssistant.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.chatAssistant.domain.User;
 
-import java.util.List;
+public interface UserService extends IService<User> {
 
-public interface UserService {
+    /**
+     * 登录
+     * @param userName 用户名
+     * @param password 密码
+     * @return true:登录成功 false:登录失败
+     */
+    boolean login(String userName, String password);
 
-    abstract public boolean login(String userName, String password);
+    /**
+     * 注册
+     * @param userName 用户名
+     * @param password 密码
+     * @param checkPassword 确认密码
+     * @return true:注册成功 false:注册失败
+     */
+    boolean register(String userName, String password,String checkPassword);
 
-    abstract public boolean register(String userName, String password);
+    /**
+     * 登出
+     * @return true:登出成功 false:登出失败
+     */
+    boolean logout();
 
-    abstract public boolean logout(String userName);
-
-    abstract public User getUserByUserName(String userName);
-
-    abstract public List<User> getUserByIds(List<Long> ids);
 
 
 }

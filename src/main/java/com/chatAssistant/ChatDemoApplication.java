@@ -7,6 +7,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @SpringBootApplication
 @MapperScan("com.chatAssistant.mapper")
+@EnableWebMvc
 public class ChatDemoApplication {
 
 	public static void main(String[] args) {

@@ -1,4 +1,27 @@
 server:
-  port: 8081
-
-
+  port: 8080
+spring:
+  application:
+    name: chatServer
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://175.178.79.245:3306/chatgpt
+    username: chatgpt
+    password: rDhY2xPiKW2pFwWb
+    druid:
+      db-type: com.alibaba.druid.pool.DruidDataSource
+      initial-size: 5
+      in-idle: 5
+      max-active: 20
+      min-idle: 5
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+        logic-delete-field: isAvailable
+        logic-delete-value: 0
+        logic-not-delete-value: 1
