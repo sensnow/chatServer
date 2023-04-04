@@ -73,7 +73,7 @@ public class ChatGptServiceImpl implements ChatGptService {
             // 获取message
             JSONObject messageObject = (JSONObject) jsonObject.getInnerMap().get("message");
             // 获取role和content
-            message = new Message((String) messageObject.get("role"),(String) messageObject.get("content"));
+            message = new Message((String) messageObject.getInnerMap().get("role"),(String) messageObject.getInnerMap().get("content"));
         }
         return message;
 
