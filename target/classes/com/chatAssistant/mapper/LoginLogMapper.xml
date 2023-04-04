@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chatAssistant.mapper.LoginLogMapper">
+
+    <resultMap id="BaseResultMap" type="com.chatAssistant.domain.LoginLog">
+            <id property="loginId" column="login_id" jdbcType="INTEGER"/>
+            <result property="loginTime" column="login_time" jdbcType="TIMESTAMP"/>
+            <result property="uid" column="uid" jdbcType="INTEGER"/>
+    </resultMap>
+
+</mapper>
