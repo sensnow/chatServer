@@ -4,7 +4,7 @@ spring:
   application:
     name: chatServer
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://175.178.79.245:3306/chatgpt
     username: chatgpt
     password: rDhY2xPiKW2pFwWb
