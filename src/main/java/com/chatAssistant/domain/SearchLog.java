@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -13,17 +15,18 @@ import lombok.Data;
  */
 @TableName(value ="search_log")
 @Data
+@AllArgsConstructor
 public class SearchLog implements Serializable {
     /**
      * 
      */
     @TableId
-    private Integer searchId;
+    private String searchId;
 
     /**
      * 
      */
-    private Date searchTime;
+    private String searchTime;
 
     /**
      * 

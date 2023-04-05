@@ -70,4 +70,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return userMapper.selectOne(new QueryWrapper<User>().eq("user_name", userName));
     }
 
+    @Override
+    public User getUserByUid(Integer uid) {
+        return userMapper.selectById(uid);
+    }
+
+    @Override
+    public String getUserNameByUid(Integer uid) {
+        return userMapper.selectById(uid).getUserName();
+    }
+
 }
