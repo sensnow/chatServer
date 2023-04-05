@@ -41,16 +41,24 @@ public class ChatController {
         return ResultUtils.success(chat);
     }
 
+    /**
+     * 创建新搜索
+     * @param request 请求
+     * @return 聊天内容
+     */
     @GetMapping("")
     public Result<String> getChat(HttpServletRequest request){
         Integer uid = Integer.valueOf(request.getParameterValues("uid")[0]);
-
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String time = java.time.LocalDateTime.now().format(formatter);
         String userNameByUid = userService.getUserNameByUid(uid);
         String searchId = userNameByUid+System.currentTimeMillis();
-        searchLogService.insert(searchId,uid,time);
-        return ResultUtils.success(searchId);
+        boolean insert = searchLogService.insert(searchId, uid, time);
+        if(insert){
+            return ResultUtils.success(searchId);
+        }else {
+            return ResultUtils.error(400,"创建失败");
+        }
     }
 
 }
