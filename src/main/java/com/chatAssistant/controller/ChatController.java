@@ -106,4 +106,24 @@ public class ChatController {
         return ResultUtils.success(allMessageBySearchId);
     }
 
+
+    /**
+     * 删除聊天记录
+     * @return 聊天内容
+     */
+    @DeleteMapping("/conversation")
+    public Result<String> deleteMessage(HttpServletRequest request){
+        String searchId = request.getParameter("searchId");
+        Integer uid = searchLogService.getBySearchId(searchId).getUid();
+        if(!uid.equals(StpUtil.getSession().get("uid"))){
+            return ResultUtils.error(400,"无权限");
+        }
+        int i = searchLogService.deleteBySearchIdInt(searchId);
+        if(i >0){
+            return ResultUtils.success("删除成功");
+        }else {
+            return ResultUtils.error(400,"删除失败");
+        }
+    }
+
 }

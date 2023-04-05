@@ -2,6 +2,7 @@ package com.chatAssistant.mapper;
 
 import com.chatAssistant.domain.SearchLog;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -26,6 +27,12 @@ public interface SearchLogMapper extends BaseMapper<SearchLog> {
 
     @Select("select search_id from search_log where uid=#{uid}")
     List<String> getAllSearchIdByUid(Integer uid);
+
+    @Delete("delete from search_log where search_id=#{searchId}")
+    int deleteBySearchIdInt(String searchId);
+
+    @Select("select * from search_log where search_id=#{searchId}")
+    SearchLog getBySearchId(String searchId);
 
 }
 

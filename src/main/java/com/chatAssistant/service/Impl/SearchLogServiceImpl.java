@@ -35,6 +35,20 @@ public class SearchLogServiceImpl extends ServiceImpl<SearchLogMapper, SearchLog
         return searchLogMapper.getAllSearchIdByUid(uid);
     }
 
+    @Override
+    public int deleteBySearchIdInt(String searchId) {
+        if(getSearchLogCount(searchId) == 0){
+            throw new RuntimeException("该搜索记录不存在");
+        }else {
+            return searchLogMapper.deleteBySearchIdInt(searchId);
+        }
+    }
+
+    @Override
+    public SearchLog getBySearchId(String searchId) {
+        return searchLogMapper.getBySearchId(searchId);
+    }
+
 
 }
 
