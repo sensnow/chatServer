@@ -22,7 +22,7 @@ public class SearchLogServiceImpl extends ServiceImpl<SearchLogMapper, SearchLog
 
     @Override
     public boolean insert( String searchId,Integer uid, String date) {
-        return searchLogMapper.insert(new SearchLog(searchId, date, uid))==1;
+        return searchLogMapper.insert(new SearchLog(searchId, date, uid,null))==1;
     }
 
     @Override
@@ -33,6 +33,11 @@ public class SearchLogServiceImpl extends ServiceImpl<SearchLogMapper, SearchLog
     @Override
     public List<String> getAllSearchIdByUid(Integer uid) {
         return searchLogMapper.getAllSearchIdByUid(uid);
+    }
+
+    @Override
+    public List<SearchLog> getAllSearchLogByUid(Integer uid) {
+        return searchLogMapper.getAllSearchLogByUid(uid);
     }
 
     @Override
@@ -47,6 +52,13 @@ public class SearchLogServiceImpl extends ServiceImpl<SearchLogMapper, SearchLog
     @Override
     public SearchLog getBySearchId(String searchId) {
         return searchLogMapper.getBySearchId(searchId);
+    }
+
+    @Override
+    public int setDescribe(String searchId, String describe) {
+        if(describe == null || describe.equals(""))
+            throw new RuntimeException("描述不能为空");
+        return searchLogMapper.setDescribe(searchId, describe);
     }
 
 

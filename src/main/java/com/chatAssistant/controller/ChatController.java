@@ -5,6 +5,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.chatAssistant.common.Result;
 import com.chatAssistant.domain.ConversationLog;
 import com.chatAssistant.domain.Message;
+import com.chatAssistant.domain.SearchLog;
 import com.chatAssistant.domain.User;
 import com.chatAssistant.service.ChatGptService;
 import com.chatAssistant.service.ConversationLogService;
@@ -56,6 +57,10 @@ public class ChatController {
         }
         int size = messages.size();
         if(size>0){
+            if(size == 1){
+                Message message = messages.get(0);
+                int i = searchLogService.setDescribe(searchId, message.getContent());
+            }
             Message message = messages.get(size - 1);
             boolean insert = conversationLogService.insert(message, searchId);
         }else {
@@ -88,10 +93,10 @@ public class ChatController {
      * @return 聊天内容
      */
     @GetMapping("/conversationlist")
-    public Result<List<String>> getConversation(){
+    public Result<List<SearchLog>> getConversation(){
         SaSession session = StpUtil.getSession();
         Integer uid = (Integer) session.get("uid");
-        List<String> allSearchIdByUid = searchLogService.getAllSearchIdByUid(uid);
+        List<SearchLog> allSearchIdByUid = searchLogService.getAllSearchLogByUid(uid);
         return ResultUtils.success(allSearchIdByUid);
     }
 
