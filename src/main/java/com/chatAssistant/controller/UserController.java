@@ -91,6 +91,16 @@ public class UserController {
 
     }
 
+    @PostMapping("/checkUserName")
+    public Result<String> checkUserName(@RequestBody String userName){
+        boolean b = userService.checkUserName(userName);
+        if(b){
+            return ResultUtils.error(400,"用户名已存在");
+        }else {
+            return ResultUtils.success("用户名可用");
+        }
+    }
+
     /**
      * 登出
      * @return 登出结果

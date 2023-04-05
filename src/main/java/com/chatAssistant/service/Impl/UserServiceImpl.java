@@ -80,4 +80,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return userMapper.selectById(uid).getUserName();
     }
 
+    @Override
+    public boolean checkUserName(String userName) {
+        return userMapper.selectOne(new QueryWrapper<User>().eq("user_name", userName)) != null;
+    }
+
 }

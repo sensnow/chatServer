@@ -49,6 +49,11 @@ public interface UserService extends IService<User> {
      */
     String getUserNameByUid(Integer uid);
 
-
+    /**
+     * 检查用户是否存在
+     * @param userName
+     * @return
+     */
+    boolean checkUserName(String userName);
 
 }
