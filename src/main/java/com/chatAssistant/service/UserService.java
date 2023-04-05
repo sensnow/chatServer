@@ -20,7 +20,7 @@ public interface UserService extends IService<User> {
      * @param checkPassword 确认密码
      * @return true:注册成功 false:注册失败
      */
-    boolean register(String userName, String password,String checkPassword);
+    boolean register(String userName, String password,String checkPassword,String date);
 
     /**
      * 登出
@@ -55,5 +55,12 @@ public interface UserService extends IService<User> {
      * @return
      */
     boolean checkUserName(String userName);
+
+    /**
+     * 获取用户信息
+     * @param uid
+     * @return
+     */
+    User getUserInfo(Integer uid);
 
 }

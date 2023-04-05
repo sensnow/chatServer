@@ -17,6 +17,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
                 .excludePathPatterns(
                         "/user/login",
                         "/user/register",
+                        "/user/checkUserName",
                         "/**/*.css",
                         "/**/*.js"
                 );

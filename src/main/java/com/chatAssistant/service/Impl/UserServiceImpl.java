@@ -41,7 +41,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public boolean register(String userName, String password,String checkPassword) {
+    public boolean register(String userName, String password,String checkPassword,String date) {
 
         // 密码不同
         if(!password.equals(checkPassword)) {
@@ -53,7 +53,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         // 密码加密
         String encode = DigestUtils.md5DigestAsHex(password.getBytes());
-        User user = new User(0,userName, encode,1);
+        User user = new User(0,userName, encode, date);
         int insert = userMapper.insert(user);
         return insert == 1;
     }
@@ -86,6 +86,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             throw new BusinessException(Code.ERROR, "用户名不能为空");
         }
         return userMapper.selectOne(new QueryWrapper<User>().eq("user_name", userName)) != null;
+    }
+
+    @Override
+    public User getUserInfo(Integer uid) {
+        return userMapper.selectById(uid);
     }
 
 }

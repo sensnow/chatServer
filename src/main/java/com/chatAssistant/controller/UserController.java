@@ -79,7 +79,7 @@ public class UserController {
         if (user.getUserName() == null || user.getPassword() == null|| user.getCheckPassword() == null) {
             throw new BusinessException(Code.ERROR,"参数错误");
         }
-        boolean register = userService.register(user.getUserName(), user.getPassword(), user.getCheckPassword());
+        boolean register = userService.register(user.getUserName(), user.getPassword(), user.getCheckPassword(),TimeUtils.getTime());
         if(!register)
         {
            throw new BusinessException(Code.ERROR,"注册失败");
@@ -99,6 +99,18 @@ public class UserController {
         }else {
             return ResultUtils.success("用户名可用");
         }
+    }
+
+    /**
+     * 获取当前登录用户信息
+     * @return 当前登录用户信息
+     */
+    @GetMapping("/info")
+    public Result<User> info() {
+        // 获取当前登录用户信息
+        Integer uid = (Integer) StpUtil.getSession().get("uid");
+        User userInfo = userService.getUserInfo(uid);
+        return ResultUtils.success(userInfo);
     }
 
     /**

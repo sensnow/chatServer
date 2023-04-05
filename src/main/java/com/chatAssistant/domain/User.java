@@ -19,7 +19,7 @@ public class User implements Serializable {
     private Integer uid;
     private String userName;
     private String password;
-    private Integer isAvailable;
+    private String regDate;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
