@@ -14,4 +14,15 @@ public interface Code {
      */
     Integer ERROR = 500;
 
+    /**
+     * 禁止注册
+     */
+    Integer Reg_ERROR = 501;
+
+    /**
+     * 用户名已存在
+     */
+    Integer USER_NAME_EXIST = 502;
+
+
 }

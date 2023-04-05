@@ -20,6 +20,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
+import static com.chatAssistant.config.UserConfig.reg_available;
+
 /**
  * 用户控制器
  * @author sensnow
@@ -74,6 +76,8 @@ public class UserController {
      */
     @PostMapping("/register")
     public Result<String> register(@RequestBody UserRegRequest user) {
+        if(!reg_available)
+            throw new BusinessException(Code.Reg_ERROR,"注册功能已关闭");
 
         // 参数校验
         if (user.getUserName() == null || user.getPassword() == null|| user.getCheckPassword() == null) {
@@ -123,4 +127,24 @@ public class UserController {
         userService.logout();
         return ResultUtils.success("登出成功");
     }
+
+    @GetMapping("/register")
+    public Result<String> register() {
+        if (reg_available){
+            return ResultUtils.success("可注册");
+        }else {
+            return ResultUtils.error(Code.Reg_ERROR,"不可注册");
+        }
+    }
+
+    @PostMapping("/regSwitch/{key}")
+    public Result<String> regSwitch(@PathVariable String key) {
+        if ("k812vna123dmamp551ss1oytt1".equals(key)){
+            reg_available = !reg_available;
+            return ResultUtils.success("操作成功");
+        }else {
+            return ResultUtils.error(Code.ERROR,"操作失败");
+        }
+    }
+
 }
