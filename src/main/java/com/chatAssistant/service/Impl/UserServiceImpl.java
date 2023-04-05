@@ -65,4 +65,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return true;
     }
 
+    @Override
+    public User getUserByUserName(String userName) {
+        return userMapper.selectOne(new QueryWrapper<User>().eq("user_name", userName));
+    }
+
 }

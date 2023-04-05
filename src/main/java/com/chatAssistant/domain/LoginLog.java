@@ -6,7 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
+
+import lombok.*;
 
 /**
  * 
@@ -14,6 +15,10 @@ import lombok.Data;
  */
 @TableName(value ="login_log")
 @Data
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class LoginLog implements Serializable {
     /**
      * 
@@ -24,12 +29,17 @@ public class LoginLog implements Serializable {
     /**
      * 
      */
-    private Date loginTime;
+    private String loginTime;
 
     /**
      * 
      */
     private Integer uid;
+
+    /**
+     *
+     */
+    private String ip;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
@@ -48,6 +58,7 @@ public class LoginLog implements Serializable {
         LoginLog other = (LoginLog) that;
         return (this.getLoginId() == null ? other.getLoginId() == null : this.getLoginId().equals(other.getLoginId()))
             && (this.getLoginTime() == null ? other.getLoginTime() == null : this.getLoginTime().equals(other.getLoginTime()))
+            && (this.getIp() == null ? other.getIp() == null : this.getIp().equals(other.getIp()))
             && (this.getUid() == null ? other.getUid() == null : this.getUid().equals(other.getUid()));
     }
 
@@ -56,7 +67,8 @@ public class LoginLog implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getLoginId() == null) ? 0 : getLoginId().hashCode());
-        result = prime * result + ((getLoginTime() == null) ? 0 : getLoginTime().hashCode());
+        result = prime * result + ((getLoginTime() == null) ? 0 : String.valueOf(getLoginTime()).hashCode());
+        result = prime * result + ((getIp() == null) ? 0 : getIp().hashCode());
         result = prime * result + ((getUid() == null) ? 0 : getUid().hashCode());
         return result;
     }
@@ -69,6 +81,7 @@ public class LoginLog implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", loginId=").append(loginId);
         sb.append(", loginTime=").append(loginTime);
+        sb.append(", ip=").append(ip);
         sb.append(", uid=").append(uid);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");

@@ -28,6 +28,13 @@ public interface UserService extends IService<User> {
      */
     boolean logout();
 
+    /**
+     * 根据用户名获取用户
+     * @param userName 用户名
+     * @return 用户
+     */
+    User getUserByUserName(String userName);
+
 
 
 }
