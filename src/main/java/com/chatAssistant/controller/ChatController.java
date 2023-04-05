@@ -3,10 +3,9 @@ package com.chatAssistant.controller;
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import com.chatAssistant.common.Result;
-import com.chatAssistant.domain.ConversationLog;
+import com.chatAssistant.domain.ChatMsg;
 import com.chatAssistant.domain.Message;
 import com.chatAssistant.domain.SearchLog;
-import com.chatAssistant.domain.User;
 import com.chatAssistant.service.ChatGptService;
 import com.chatAssistant.service.ConversationLogService;
 import com.chatAssistant.service.SearchLogService;
@@ -17,7 +16,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -41,12 +39,13 @@ public class ChatController {
 
     /**
      * 获取聊天内容
-     * @param messages 消息列表
+     * @param chatMsg 消息列表
      * @return 聊天内容
      */
     @PostMapping("")
-    public Result<Message> getChat(@RequestBody List<Message> messages,HttpServletRequest request){
-        String searchId = request.getParameter("searchId");
+    public Result<Message> getChat(@RequestBody ChatMsg chatMsg, HttpServletRequest request){
+        String searchId = chatMsg.getSearchId();
+        List<Message> messages = chatMsg.getMessages();
         try {
             int searchLogCount = searchLogService.getSearchLogCount(searchId);
             if(searchLogCount==0){
@@ -59,15 +58,15 @@ public class ChatController {
         if(size>0){
             if(size == 1){
                 Message message = messages.get(0);
-                int i = searchLogService.setDescribe(searchId, message.getContent());
+                searchLogService.setDescribe(searchId, message.getContent());
             }
             Message message = messages.get(size - 1);
-            boolean insert = conversationLogService.insert(message, searchId);
+            conversationLogService.insert(message, searchId);
         }else {
             throw new RuntimeException("消息列表为空");
         }
         Message chat = chatService.getChat(messages);
-        boolean insert = conversationLogService.insert(chat,searchId);
+        conversationLogService.insert(chat,searchId);
         return ResultUtils.success(chat);
     }
 

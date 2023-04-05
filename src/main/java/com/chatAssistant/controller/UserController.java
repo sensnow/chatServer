@@ -16,10 +16,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-
 import static com.chatAssistant.config.UserConfig.reg_available;
 
 /**
@@ -57,7 +53,7 @@ public class UserController {
                 if(addr == null || addr.length() == 0 || "unknown".equalsIgnoreCase(addr)) {
                     addr = request.getRemoteAddr();
                 }
-                boolean insert = loginLogService.insert(userByUserName.getUid(), TimeUtils.getTime(), addr);
+                loginLogService.insert(userByUserName.getUid(), TimeUtils.getTime(), addr);
             } catch (Exception e) {
                 System.out.println(e);
             }
