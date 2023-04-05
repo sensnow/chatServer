@@ -82,6 +82,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Override
     public boolean checkUserName(String userName) {
+        if("".equals(userName.trim())) {
+            throw new BusinessException(Code.ERROR, "用户名不能为空");
+        }
         return userMapper.selectOne(new QueryWrapper<User>().eq("user_name", userName)) != null;
     }
 
