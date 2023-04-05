@@ -4,6 +4,9 @@ import com.chatAssistant.domain.SearchLog;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
 * @author sensnow
@@ -17,6 +20,12 @@ public interface SearchLogMapper extends BaseMapper<SearchLog> {
 
     @Insert("insert into search_log(search_id,search_time,uid) values(#{searchId}},#{searchTime},#{uid})")
     int insertSearchLog(SearchLog searchLog);
+
+    @Select("select count(*) from search_log where search_id=#{searchId}")
+    int getSearchLogCount(String searchId);
+
+    @Select("select search_id from search_log where uid=#{uid}")
+    List<String> getAllSearchIdByUid(Integer uid);
 
 }
 

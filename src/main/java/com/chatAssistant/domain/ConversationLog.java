@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -12,7 +14,8 @@ import lombok.Data;
  */
 @TableName(value ="conservation_log")
 @Data
-public class ConservationLog implements Serializable {
+@AllArgsConstructor
+public class ConversationLog implements Serializable {
     /**
      * 
      */
@@ -22,7 +25,7 @@ public class ConservationLog implements Serializable {
     /**
      * 
      */
-    private Integer searchId;
+    private String searchId;
 
     /**
      * 
@@ -48,7 +51,7 @@ public class ConservationLog implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        ConservationLog other = (ConservationLog) that;
+        ConversationLog other = (ConversationLog) that;
         return (this.getCid() == null ? other.getCid() == null : this.getCid().equals(other.getCid()))
             && (this.getSearchId() == null ? other.getSearchId() == null : this.getSearchId().equals(other.getSearchId()))
             && (this.getMessage() == null ? other.getMessage() == null : this.getMessage().equals(other.getMessage()))

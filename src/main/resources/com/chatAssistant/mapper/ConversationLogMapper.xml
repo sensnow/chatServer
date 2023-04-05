@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.chatAssistant.mapper.ConservationLogMapper">
+<mapper namespace="com.chatAssistant.mapper.ConversationLogMapper">
 
-    <resultMap id="BaseResultMap" type="com.chatAssistant.domain.ConservationLog">
+    <resultMap id="BaseResultMap" type="com.chatAssistant.domain.ConversationLog">
             <id property="cid" column="cid" jdbcType="INTEGER"/>
             <result property="searchId" column="search_id" jdbcType="INTEGER"/>
             <result property="message" column="message" jdbcType="VARCHAR"/>

@@ -7,6 +7,8 @@ import com.chatAssistant.mapper.SearchLogMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
 * @author sensnow
 */
@@ -22,6 +24,18 @@ public class SearchLogServiceImpl extends ServiceImpl<SearchLogMapper, SearchLog
     public boolean insert( String searchId,Integer uid, String date) {
         return searchLogMapper.insert(new SearchLog(searchId, date, uid))==1;
     }
+
+    @Override
+    public int getSearchLogCount(String searchId) {
+        return searchLogMapper.getSearchLogCount(searchId);
+    }
+
+    @Override
+    public List<String> getAllSearchIdByUid(Integer uid) {
+        return searchLogMapper.getAllSearchIdByUid(uid);
+    }
+
+
 }
 
 

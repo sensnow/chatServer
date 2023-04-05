@@ -3,6 +3,8 @@ package com.chatAssistant.service;
 import com.chatAssistant.domain.SearchLog;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
 * @author sensnow
 * @description 针对表【search_log】的数据库操作Service
@@ -17,4 +19,9 @@ public interface SearchLogService extends IService<SearchLog> {
         * @return 插入的行数
         */
         boolean insert(String searchId,Integer uid, String date);
+
+        int getSearchLogCount(String searchId);
+
+        List<String> getAllSearchIdByUid(Integer uid);
+
 }
