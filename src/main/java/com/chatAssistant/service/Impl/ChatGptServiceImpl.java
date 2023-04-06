@@ -12,12 +12,8 @@ import okhttp3.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
-import java.util.HashMap;
+import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 实现类

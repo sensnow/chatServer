@@ -66,11 +66,6 @@ public class SearchLogServiceImpl extends ServiceImpl<SearchLogMapper, SearchLog
 
     @Override
     public int deleteByUid(Integer uid) {
-        // 先删除所有消息log
-        searchLogMapper.getAllSearchLogByUid(uid).forEach(searchLog -> {
-            conversationLogMapper.deleteBySearchId(searchLog.getSearchId());
-        });
-        // 再删除所有搜索log
         return searchLogMapper.deleteByUid(uid);
     }
 
