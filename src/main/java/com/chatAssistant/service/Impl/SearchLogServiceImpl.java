@@ -2,6 +2,7 @@ package com.chatAssistant.service.Impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chatAssistant.domain.SearchLog;
+import com.chatAssistant.mapper.ConversationLogMapper;
 import com.chatAssistant.service.SearchLogService;
 import com.chatAssistant.mapper.SearchLogMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ public class SearchLogServiceImpl extends ServiceImpl<SearchLogMapper, SearchLog
     @Autowired
     private SearchLogMapper searchLogMapper;
 
+    @Autowired
+    private ConversationLogMapper conversationLogMapper;
 
     @Override
     public boolean insert( String searchId,Integer uid, String date) {
@@ -59,6 +62,16 @@ public class SearchLogServiceImpl extends ServiceImpl<SearchLogMapper, SearchLog
         if(describe == null || describe.equals(""))
             throw new RuntimeException("描述不能为空");
         return searchLogMapper.setDescribe(searchId, describe);
+    }
+
+    @Override
+    public int deleteByUid(Integer uid) {
+        // 先删除所有消息log
+        searchLogMapper.getAllSearchLogByUid(uid).forEach(searchLog -> {
+            conversationLogMapper.deleteBySearchId(searchLog.getSearchId());
+        });
+        // 再删除所有搜索log
+        return searchLogMapper.deleteByUid(uid);
     }
 
 

@@ -6,11 +6,10 @@ import java.io.Serializable;
 import java.util.List;
 
 @Data
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChatMsg implements Serializable {
+
     private List<Message> messages;
 
     private String searchId;

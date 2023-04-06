@@ -46,6 +46,7 @@ public class ChatController {
     public Result<Message> getChat(@RequestBody ChatMsg chatMsg, HttpServletRequest request){
         String searchId = chatMsg.getSearchId();
         List<Message> messages = chatMsg.getMessages();
+        System.out.println(searchId);
         try {
             int searchLogCount = searchLogService.getSearchLogCount(searchId);
             if(searchLogCount==0){
@@ -118,11 +119,23 @@ public class ChatController {
     @DeleteMapping("/conversation")
     public Result<String> deleteMessage(HttpServletRequest request){
         String searchId = request.getParameter("searchId");
+        System.out.println(searchId);
         Integer uid = searchLogService.getBySearchId(searchId).getUid();
         if(!uid.equals(StpUtil.getSession().get("uid"))){
             return ResultUtils.error(400,"无权限");
         }
         int i = searchLogService.deleteBySearchIdInt(searchId);
+        if(i >0){
+            return ResultUtils.success("删除成功");
+        }else {
+            return ResultUtils.error(400,"删除失败");
+        }
+    }
+
+    @DeleteMapping("/allconversation")
+    public Result<String> deleteAllMessage(HttpServletRequest request){
+        Integer uid = (Integer)StpUtil.getSession().get("uid");
+        int i = searchLogService.deleteByUid(uid);
         if(i >0){
             return ResultUtils.success("删除成功");
         }else {
