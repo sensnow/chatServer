@@ -33,6 +33,9 @@ public class SearchLog implements Serializable {
      */
     private Integer uid;
 
+
+    private String describe;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
@@ -50,6 +53,7 @@ public class SearchLog implements Serializable {
         SearchLog other = (SearchLog) that;
         return (this.getSearchId() == null ? other.getSearchId() == null : this.getSearchId().equals(other.getSearchId()))
             && (this.getSearchTime() == null ? other.getSearchTime() == null : this.getSearchTime().equals(other.getSearchTime()))
+            && (this.getDescribe() == null ? other.getDescribe() == null : this.getDescribe().equals(other.getDescribe()))
             && (this.getUid() == null ? other.getUid() == null : this.getUid().equals(other.getUid()));
     }
 
@@ -59,6 +63,7 @@ public class SearchLog implements Serializable {
         int result = 1;
         result = prime * result + ((getSearchId() == null) ? 0 : getSearchId().hashCode());
         result = prime * result + ((getSearchTime() == null) ? 0 : getSearchTime().hashCode());
+        result = prime * result + ((getDescribe() == null) ? 0 : getDescribe().hashCode());
         result = prime * result + ((getUid() == null) ? 0 : getUid().hashCode());
         return result;
     }
@@ -72,6 +77,7 @@ public class SearchLog implements Serializable {
         sb.append(", searchId=").append(searchId);
         sb.append(", searchTime=").append(searchTime);
         sb.append(", uid=").append(uid);
+        sb.append(", describe=").append(describe);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

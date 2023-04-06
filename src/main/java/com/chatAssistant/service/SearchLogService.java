@@ -24,8 +24,12 @@ public interface SearchLogService extends IService<SearchLog> {
 
         List<String> getAllSearchIdByUid(Integer uid);
 
+        List<SearchLog> getAllSearchLogByUid(Integer uid);
+
         int deleteBySearchIdInt(String searchId);
 
         SearchLog getBySearchId(String searchId);
+
+        int setDescribe(String searchId,String describe);
 
 }
