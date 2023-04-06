@@ -38,7 +38,8 @@ public interface SearchLogMapper extends BaseMapper<SearchLog> {
     int setDescribe(String searchId,String describe);
 
 
-
+    @Delete("delete from search_log where uid=#{uid}")
+    int deleteByUid(Integer uid);
 }
 
 

@@ -13,11 +13,11 @@ import java.util.List;
 public interface SearchLogService extends IService<SearchLog> {
 
         /**
-        * 插入一条搜索日志
-        * @param uid 用户id
-        * @param date 搜索时间
-        * @return 插入的行数
-        */
+         * 插入一条搜索日志
+         * @param uid 用户id
+         * @param date 搜索时间
+         * @return 插入的行数
+         */
         boolean insert(String searchId,Integer uid, String date);
 
         int getSearchLogCount(String searchId);
@@ -32,4 +32,5 @@ public interface SearchLogService extends IService<SearchLog> {
 
         int setDescribe(String searchId,String describe);
 
+        int deleteByUid(Integer uid);
 }

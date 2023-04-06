@@ -1,5 +1,9 @@
 server:
-  port: 8080
+  port: 8081
+  servlet:
+    session:
+      # 3D
+      timeout: PT4320M
 spring:
   application:
     name: chatServer
@@ -8,6 +12,8 @@ spring:
     url: jdbc:mysql://175.178.79.245:3306/chatgpt
     username: chatgpt
     password: rDhY2xPiKW2pFwWb
+    hikari:
+      max-lifetime: 120000
     druid:
       db-type: com.alibaba.druid.pool.DruidDataSource
       initial-size: 5
