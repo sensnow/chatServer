@@ -28,7 +28,7 @@ public interface UserMapper extends BaseMapper<User> {
     @Insert("insert into user(userName,password) values(#{userName},#{password})")
     public int insertUser(String userName, String password);*/
 
-    @Select("select count(*) from user where userName = #{userName}")
+    @Select("select count(*) from user where user_name = #{userName}")
     public int checkUserName(String userName);
 
 }

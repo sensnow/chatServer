@@ -12,6 +12,8 @@ import com.chatAssistant.service.LoginLogService;
 import com.chatAssistant.service.UserService;
 import com.chatAssistant.utils.ResultUtils;
 import com.chatAssistant.utils.TimeUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -92,7 +94,8 @@ public class UserController {
     }
 
     @PostMapping("/checkUserName")
-    public Result<String> checkUserName(@RequestBody String userName){
+    public Result<String> checkUserName(@RequestBody User user){
+        String userName = user.getUserName();
         boolean b = userService.checkUserName(userName);
         if(b){
             return ResultUtils.error(400,"用户名已存在");
