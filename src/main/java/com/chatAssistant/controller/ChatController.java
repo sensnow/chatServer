@@ -61,11 +61,12 @@ public class ChatController {
                 Message message = messages.get(0);
                 searchLogService.setDescribe(searchId, message.getContent());
             }
-            Message message = messages.get(size - 1);
-            conversationLogService.insert(message, searchId);
+
         }else {
             throw new RuntimeException("消息列表为空");
         }
+        Message message = messages.get(size - 1);
+        conversationLogService.insert(message, searchId);
         Message chat = chatService.getChat(messages);
         conversationLogService.insert(chat,searchId);
         return ResultUtils.success(chat);
