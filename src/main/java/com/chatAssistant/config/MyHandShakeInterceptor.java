@@ -22,8 +22,6 @@ public class MyHandShakeInterceptor implements HandshakeInterceptor {
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
         HttpSession httpSession = ((ServletServerHttpRequest) request).getServletRequest().getSession();
         String sessionId = (String) httpSession.getAttribute("sessionId");
-        System.out.println("HttpSession id: " + httpSession.getId());
-        System.out.println("sessionId: " + sessionId);
         attributes.put("sessionId", sessionId);
         return true;
     }

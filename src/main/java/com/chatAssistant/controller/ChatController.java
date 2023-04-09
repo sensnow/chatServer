@@ -7,6 +7,7 @@ import com.chatAssistant.domain.ChatMsg;
 import com.chatAssistant.domain.Message;
 import com.chatAssistant.domain.SearchLog;
 import com.chatAssistant.service.*;
+import com.chatAssistant.service.Impl.ChatGptServiceImpl;
 import com.chatAssistant.utils.ResultUtils;
 import com.chatAssistant.utils.TimeUtils;
 import jakarta.servlet.http.HttpServletRequest;
@@ -79,89 +80,6 @@ public class ChatController {
         return ResultUtils.success(chat);
     }
 
-    @PostMapping("/event")
-    public SseEmitter getEvent(@RequestBody ChatMsg chatMsg){
-        SseEmitter emitter = new SseEmitter();
-        List<Message> messages = new ArrayList<>();
-        messages.add(new Message("user","ipv4的简单解释"));
-        new Thread(() -> {
-            try {
-                BufferedReader in = new BufferedReader(new InputStreamReader(chatGptService2.getChat2(messages)));
-                String inputLine;
-                StringBuilder content = new StringBuilder();
-                while ((inputLine = in.readLine()) != null) {
-                    content.append(inputLine);
-                    System.out.println(inputLine);
-                    emitter.send(inputLine);
-                }
-                in.close();
-                System.out.println(content);
-                emitter.complete();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }).start();
-        return emitter;
-    }
-    @GetMapping("/event")
-    public SseEmitter getEvent(){
-        SseEmitter emitter = new SseEmitter();
-        List<Message> messages = new ArrayList<>();
-        messages.add(new Message("user","ipv4的简单解释"));
-//        new Thread(() -> {
-//            try {
-//                BufferedReader in = new BufferedReader(new InputStreamReader(chatGptService2.getChat2(messages)));
-//                String inputLine;
-//                StringBuilder content = new StringBuilder();
-//                while ((inputLine = in.readLine()) != null) {
-//                    content.append(inputLine);
-//                    System.out.println(inputLine);
-//                    emitter.send(inputLine);
-//                }
-//                in.close();
-//                System.out.println(content);
-//                emitter.complete();
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }).start();
-        new Thread(()->{
-            try {
-                emitter.send("event: notification\n\n");
-                for(int i = 0;i<20;i++){
-                    Thread.sleep(1000);
-                    String s = "data: {"+i+"}\n\n";
-                    System.out.println(s);
-                    emitter.send(s);
-                }
-                emitter.complete();
-            } catch (InterruptedException | IOException e) {
-                throw new RuntimeException(e);
-            }
-        }).start();
-        return emitter;
-//        SseEmitter emitter = new SseEmitter();
-//        List<Message> messages = new ArrayList<>();
-//        messages.add(new Message("user","ipv4的简单解释"));
-//        new Thread(() -> {
-//            try {
-//                BufferedReader in = new BufferedReader(new InputStreamReader(chatGptService2.getChat2(messages)));
-//                String inputLine;
-//                StringBuilder content = new StringBuilder();
-//                while ((inputLine = in.readLine()) != null) {
-//                    content.append(inputLine);
-//                    System.out.println(inputLine);
-//                    emitter.send(inputLine);
-//                }
-//                emitter.complete();
-//                System.out.println(content);
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }).start();
-//        return emitter;
-    }
-
     /**
      * 创建新搜索
      * @return 聊天内容
@@ -232,6 +150,36 @@ public class ChatController {
         }else {
             return ResultUtils.error(400,"删除失败");
         }
+    }
+
+
+    @PutMapping("/updatekey/{key}")
+    public Result<String> updateKey(@PathVariable String key){
+        ChatGptServiceImpl.apikey = key;
+        return ResultUtils.success("更新成功");
+    }
+
+    @PostMapping("/saveConversation")
+    public Result<String > saveConversation(@RequestBody ChatMsg chatMsg){
+        String searchId = chatMsg.getSearchId();
+        List<Message> messages = chatMsg.getMessages();
+        System.out.println(searchId);
+        try {
+            int searchLogCount = searchLogService.getSearchLogCount(searchId);
+            if(searchLogCount==0){
+                throw new RuntimeException("searchId不存在");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        int size = messages.size();
+        if(size == 1){
+            Message message = messages.get(0);
+            conversationLogService.insert(message, searchId);
+        }else {
+            throw new RuntimeException("插入失败");
+        }
+        return new Result<>(200,null,"OK");
     }
 
 }

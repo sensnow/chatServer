@@ -39,8 +39,9 @@ public class EventWebSocketHandler extends TextWebSocketHandler {
 //    public void setChatGptService2(ChatGptService2 chatGptService2){
 //        EventWebSocketHandler.chatGptService2 = chatGptService2;
 //    }
+
     @Autowired
-    public void setChatGptService2(ChatGptService chatGptService){
+    public void setChatGptService(ChatGptService chatGptService){
         EventWebSocketHandler.chatGptService = chatGptService;
     }
 
@@ -60,7 +61,6 @@ public class EventWebSocketHandler extends TextWebSocketHandler {
         String payload = message.getPayload();
         ChatMsg chatMsg = new ObjectMapper().readValue(payload, ChatMsg.class);
         List<Message> messages = chatMsg.getMessages();
-//        String var = "data: {\"id\":\"chatcmpl-73H6ryHJj8pKN1pWpxJiO8ehHHb4s\",\"object\":\"chat.completion.chunk\",\"created\":1681015109,\"model\":\"gpt-3.5-turbo-0301\",\"choices\":[{\"delta\":{\"role\":\"assistant\"},\"index\":0,\"finish_reason\":null}]}";
         String searchId = chatMsg.getSearchId();
         if(messages.size()==0){
             return;
@@ -71,13 +71,13 @@ public class EventWebSocketHandler extends TextWebSocketHandler {
             String inputLine = "";
             StringBuilder content = new StringBuilder();
             while ((inputLine = in.readLine()) != null) {
-
                 content.append(inputLine);
                 System.out.println(inputLine);
                 session.sendMessage(new TextMessage(inputLine));
             }
             in.close();
             session.close();
+            conversationLogService.insert(messages.get(messages.size()-1),searchId);
             System.out.println(content);
         } catch (IOException e) {
             throw new RuntimeException(e);

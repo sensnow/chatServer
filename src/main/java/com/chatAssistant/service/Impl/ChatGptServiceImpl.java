@@ -25,7 +25,7 @@ import java.util.List;
 public class ChatGptServiceImpl implements ChatGptService {
 
     private static String url = "https://api.openai.com/v1/chat/completions";
-    private static String apikey = "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";
+    public static String apikey = "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";
 
     @Autowired
     private OkHttpClient client;
