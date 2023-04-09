@@ -61,6 +61,9 @@ public class EventWebSocketHandler extends TextWebSocketHandler {
         String payload = message.getPayload();
         ChatMsg chatMsg = new ObjectMapper().readValue(payload, ChatMsg.class);
         List<Message> messages = chatMsg.getMessages();
+        if(messages.size()>5){
+            messages = messages.subList(messages.size()-5,messages.size());
+        }
         String searchId = chatMsg.getSearchId();
         if(messages.size()==0){
             return;
