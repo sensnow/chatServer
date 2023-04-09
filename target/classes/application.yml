@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8088
   servlet:
     session:
       # 3D
@@ -9,9 +9,9 @@ spring:
     name: chatServer
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://175.178.79.245:3306/chatgpt
+    url: jdbc:mysql://43.156.61.92:3306/chatgpt?allowCreateDatabaseIfNotExist=true&useSSL=false
     username: chatgpt
-    password: rDhY2xPiKW2pFwWb
+    password: cs85EX7RZ34xj4JY
     hikari:
       max-lifetime: 120000
     druid:
