@@ -5,9 +5,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.chatAssistant.domain.ChatMsg;
 import com.chatAssistant.domain.Message;
+import com.chatAssistant.domain.SearchLog;
 import com.chatAssistant.service.ChatGptService;
 import com.chatAssistant.service.ChatGptService2;
 import com.chatAssistant.service.ConversationLogService;
+import com.chatAssistant.service.SearchLogService;
 import com.chatAssistant.utils.JsonParseUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,26 +30,27 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class EventWebSocketHandler extends TextWebSocketHandler {
 
-    private static ChatGptService2 chatGptService2;
 
     private static ChatGptService chatGptService;
 
     private static ConversationLogService conversationLogService;
 
 
-//    @Autowired
-//    public void setChatGptService2(ChatGptService2 chatGptService2){
-//        EventWebSocketHandler.chatGptService2 = chatGptService2;
-//    }
+    private static SearchLogService searchLogService;
+
 
     @Autowired
-    public void setChatGptService(ChatGptService chatGptService){
+    public void setChatGptService(){
         EventWebSocketHandler.chatGptService = chatGptService;
     }
 
     @Autowired
-    public void setConversationLogService(ConversationLogService conversationLogService){
+    public void setAttribute(ConversationLogService conversationLogService,
+                             SearchLogService searchLogService,
+                             ChatGptService chatGptService){
         EventWebSocketHandler.conversationLogService = conversationLogService;
+        EventWebSocketHandler.searchLogService = searchLogService;
+        EventWebSocketHandler.chatGptService = chatGptService;
     }
 
 
@@ -67,9 +70,13 @@ public class EventWebSocketHandler extends TextWebSocketHandler {
         String searchId = chatMsg.getSearchId();
         if(messages.size()==0){
             return;
+        }else if(messages.size()==1){
+            int i = searchLogService.setDescribe(searchId, messages.get(0).getContent());
+            if(i==0){
+                throw new RuntimeException("searchId不存在");
+            }
         }
         try {
-//            BufferedReader in = new BufferedReader(new InputStreamReader(chatGptService2.getChat2(messages)));
             BufferedReader in = new BufferedReader(new InputStreamReader(chatGptService.getChatStream(messages)));
             String inputLine = "";
             StringBuilder content = new StringBuilder();
