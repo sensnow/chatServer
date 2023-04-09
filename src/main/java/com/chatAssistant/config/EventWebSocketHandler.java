@@ -62,24 +62,22 @@ public class EventWebSocketHandler extends TextWebSocketHandler {
         List<Message> messages = chatMsg.getMessages();
 //        String var = "data: {\"id\":\"chatcmpl-73H6ryHJj8pKN1pWpxJiO8ehHHb4s\",\"object\":\"chat.completion.chunk\",\"created\":1681015109,\"model\":\"gpt-3.5-turbo-0301\",\"choices\":[{\"delta\":{\"role\":\"assistant\"},\"index\":0,\"finish_reason\":null}]}";
         String searchId = chatMsg.getSearchId();
+        if(messages.size()==0){
+            return;
+        }
         try {
 //            BufferedReader in = new BufferedReader(new InputStreamReader(chatGptService2.getChat2(messages)));
             BufferedReader in = new BufferedReader(new InputStreamReader(chatGptService.getChatStream(messages)));
             String inputLine = "";
             StringBuilder content = new StringBuilder();
-            String role = "";
             while ((inputLine = in.readLine()) != null) {
-                if(Objects.equals(role, "")){
-                    role = JsonParseUtils.parseJson(inputLine);
-                    continue;
-                }
-                String content_seg = JsonParseUtils.parseJson(inputLine);
-                Message message1 = new Message(content_seg, role);
-                content.append(content_seg);
-                System.out.print(content_seg);
-                session.sendMessage(new TextMessage(JSON.toJSONString(message1)));
+
+                content.append(inputLine);
+                System.out.println(inputLine);
+                session.sendMessage(new TextMessage(inputLine));
             }
             in.close();
+            session.close();
             System.out.println(content);
         } catch (IOException e) {
             throw new RuntimeException(e);
