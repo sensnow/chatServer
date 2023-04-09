@@ -20,4 +20,6 @@ public class GptData {
     private int top_p;
 
     private int n;
+
+    boolean stream = false;
 }

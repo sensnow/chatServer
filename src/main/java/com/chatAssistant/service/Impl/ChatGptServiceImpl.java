@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -32,7 +33,7 @@ public class ChatGptServiceImpl implements ChatGptService {
     @Override
     public Message getChat(List<Message> messages) {
 
-        GptData data = new GptData(messages,"gpt-3.5-turbo",1000,0.5f,1,1);
+        GptData data = new GptData(messages,"gpt-3.5-turbo",1000,0.5f,1,1,false);
         // 请求体搭建
         RequestBody requestBody = RequestBody.create(JSON.toJSONString(data), MediaType.parse("application/json"));
         // 请求搭建
@@ -74,5 +75,40 @@ public class ChatGptServiceImpl implements ChatGptService {
         return message;
 
 
+    }
+
+    @Override
+    public InputStream getChatStream(List<Message> messages) {
+
+        GptData data = new GptData(messages,"gpt-3.5-turbo",1000,0.5f,1,1,true);
+        // 请求体搭建
+        RequestBody requestBody = RequestBody.create(JSON.toJSONString(data), MediaType.parse("application/json"));
+        // 请求搭建
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Content-Type","application/json")
+                .addHeader("Authorization","Bearer "+ apikey)
+                .post(requestBody)
+                .build();
+
+        Response response = null;
+        // TODO 这里可以改成全局拦截异常类
+        try {
+            response = client.newCall(request).execute();
+        } catch (IOException e) {
+            log.error("无法获取response");
+            throw new RuntimeException(e);
+        }
+
+        // 返回200
+        Message message = null;
+        if(response.code()== Code.SUCCESS)
+        {
+            JSONObject parse =null;
+            if (response.body() != null) {
+                return response.body().byteStream();
+            }
+        }
+        return null;
     }
 }

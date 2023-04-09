@@ -2,7 +2,9 @@ package com.chatAssistant.service;
 
 
 import com.chatAssistant.domain.Message;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -16,4 +18,10 @@ public interface ChatGptService {
      * @return 聊天
      */
     Message getChat(List<Message> messages);
+
+
+    InputStream getChatStream(List<Message> messages);
+
+
+
 }

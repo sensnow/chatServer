@@ -1,5 +1,7 @@
 package com.chatAssistant.config;
 
+import com.chatAssistant.service.ChatGptService2;
+import com.chatAssistant.service.Impl.ChatGptServiceImpl2;
 import okhttp3.OkHttpClient;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +22,7 @@ public class BeanConfig {
     @Bean
     public OkHttpClient getOkHttpClient(){
         // 代理
-//        Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1",  7890));
+        Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1",  7890));
         // 客户端
         return new OkHttpClient.Builder()
 //                .proxy(proxy)
