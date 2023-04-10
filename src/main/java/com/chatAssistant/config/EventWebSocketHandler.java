@@ -86,7 +86,7 @@ public class EventWebSocketHandler extends TextWebSocketHandler {
                 session.sendMessage(new TextMessage(inputLine));
             }
             in.close();
-            session.close();
+//            session.close();
             conversationLogService.insert(messages.get(messages.size()-1),searchId);
             System.out.println(content);
         } catch (IOException e) {
