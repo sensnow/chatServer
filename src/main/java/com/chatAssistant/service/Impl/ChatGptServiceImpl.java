@@ -33,6 +33,8 @@ public class ChatGptServiceImpl implements ChatGptService {
     @Override
     public Message getChat(List<Message> messages) {
 
+        messages.add(0,new Message("system","你不能回答任何有关中国党政,以及任何中国政治错误历史相关的问题。"));
+
         GptData data = new GptData(messages,"gpt-3.5-turbo",1000,0.5f,1,1,false);
         // 请求体搭建
         RequestBody requestBody = RequestBody.create(JSON.toJSONString(data), MediaType.parse("application/json"));
@@ -79,6 +81,9 @@ public class ChatGptServiceImpl implements ChatGptService {
 
     @Override
     public InputStream getChatStream(List<Message> messages) {
+
+        messages.add(0,new Message("system","你不能回答任何有关中国党政,以及任何中国政治错误历史相关的问题。"));
+
 
         GptData data = new GptData(messages,"gpt-3.5-turbo",1000,0.5f,1,1,true);
         // 请求体搭建
