@@ -17,4 +17,6 @@ public interface ConversationLogService extends IService<ConversationLog> {
 
     List<Message> getMessagesBySearchId(String searchId);
 
+
+    boolean deleteLastMsg(String searchId);
 }

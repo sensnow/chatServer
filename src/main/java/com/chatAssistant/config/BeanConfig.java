@@ -22,7 +22,7 @@ public class BeanConfig {
     @Bean
     public OkHttpClient getOkHttpClient(){
         // 代理
-        Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1",  7890));
+//        Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1",  7890));
         // 客户端
         return new OkHttpClient.Builder()
 //                .proxy(proxy)

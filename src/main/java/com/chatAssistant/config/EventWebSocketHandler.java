@@ -64,6 +64,14 @@ public class EventWebSocketHandler extends TextWebSocketHandler {
         String payload = message.getPayload();
         ChatMsg chatMsg = new ObjectMapper().readValue(payload, ChatMsg.class);
         List<Message> messages = chatMsg.getMessages();
+        String role = messages.get(messages.size() - 1).getRole();
+        if(role.equals("assistant")){
+            boolean b = conversationLogService.deleteLastMsg(chatMsg.getSearchId());
+            if(!b){
+                throw new RuntimeException("searchId不存在");
+            }
+            messages = messages.subList(0,messages.size()-1);
+        }
         if(messages.size()>5){
             messages = messages.subList(messages.size()-5,messages.size());
         }
@@ -87,7 +95,9 @@ public class EventWebSocketHandler extends TextWebSocketHandler {
             }
             in.close();
 //            session.close();
-            conversationLogService.insert(messages.get(messages.size()-1),searchId);
+            if(!role.equals("assistant")){
+                conversationLogService.insert(messages.get(messages.size()-1),searchId);
+            }
             System.out.println(content);
         } catch (IOException e) {
             throw new RuntimeException(e);

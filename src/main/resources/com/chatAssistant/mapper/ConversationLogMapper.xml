@@ -11,5 +11,9 @@
             <result property="role" column="role" jdbcType="VARCHAR"/>
     </resultMap>
 
+<!--    <delete id="deleteLastMsg" parameterType="java.lang.Integer">-->
+<!--        DELETE FROM conversation_log WHERE cid = (SELECT * from (SELECT MAX(cid) FROM conversation_log WHERE search_id = #{searchId}) as t)-->
+<!--    </delete>-->
+
 
 </mapper>

@@ -3,6 +3,7 @@ package com.chatAssistant.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.chatAssistant.domain.ConversationLog;
 import com.chatAssistant.domain.Message;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -24,6 +25,12 @@ public interface ConversationLogMapper extends BaseMapper<ConversationLog> {
 
     @Select("select role,message as content from conversation_log where search_id = #{searchId} order by cid asc")
     List<Message> getMessagesBySearchId(String searchId);
+
+
+//    @Delete("delete from conversation_log where cid = (select max(c2.cid) from conversation_log c2 where c2.search_id = #{searchId})")
+
+    @Delete("DELETE FROM conversation_log WHERE cid = (SELECT * from (SELECT MAX(t.cid) FROM conversation_log t WHERE t.search_id = #{searchId}) as t2)")
+    Integer deleteLastMsg(String searchId);
 
 }
 

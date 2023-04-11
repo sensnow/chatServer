@@ -32,6 +32,11 @@ public class ConversationLogServiceImpl extends ServiceImpl<ConversationLogMappe
     public List<Message> getMessagesBySearchId(String searchId) {
         return conversationLogMapper.getMessagesBySearchId(searchId);
     }
+
+    @Override
+    public boolean deleteLastMsg(String searchId) {
+        return conversationLogMapper.deleteLastMsg(searchId) == 1;
+    }
 }
 
 

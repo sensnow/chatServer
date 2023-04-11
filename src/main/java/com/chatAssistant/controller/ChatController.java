@@ -54,7 +54,14 @@ public class ChatController {
     public Result<Message> getChat(@RequestBody ChatMsg chatMsg){
         String searchId = chatMsg.getSearchId();
         List<Message> messages = chatMsg.getMessages();
-        System.out.println(searchId);
+        String role = messages.get(messages.size() - 1).getRole();
+        if(role.equals("assistant")){
+            boolean b = conversationLogService.deleteLastMsg(searchId);
+            if(!b){
+                throw new RuntimeException("searchId不存在");
+            }
+            messages.remove(messages.size() - 1);
+        }
         try {
             int searchLogCount = searchLogService.getSearchLogCount(searchId);
             if(searchLogCount==0){
@@ -74,7 +81,9 @@ public class ChatController {
             throw new RuntimeException("消息列表为空");
         }
         Message message = messages.get(size - 1);
-        conversationLogService.insert(message, searchId);
+        if(!role.equals("assistant")){
+            conversationLogService.insert(message, searchId);
+        }
         Message chat = chatService.getChat(messages);
         conversationLogService.insert(chat,searchId);
         return ResultUtils.success(chat);
