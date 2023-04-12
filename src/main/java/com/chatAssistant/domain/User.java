@@ -22,6 +22,7 @@ public class User implements Serializable {
     private String userName;
     private String password;
     private String regDate;
+    private Integer isAvailable;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

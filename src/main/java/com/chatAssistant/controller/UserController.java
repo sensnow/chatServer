@@ -8,6 +8,7 @@ import com.chatAssistant.domain.User;
 import com.chatAssistant.exception.BusinessException;
 import com.chatAssistant.request.UserLoginRequest;
 import com.chatAssistant.request.UserRegRequest;
+import com.chatAssistant.service.Impl.VipServiceImpl;
 import com.chatAssistant.service.LoginLogService;
 import com.chatAssistant.service.UserService;
 import com.chatAssistant.utils.ResultUtils;
@@ -82,12 +83,15 @@ public class UserController {
             throw new BusinessException(Code.ERROR,"参数错误");
         }
         boolean register = userService.register(user.getUserName(), user.getPassword(), user.getCheckPassword(),TimeUtils.getTime());
+
         if(!register)
         {
            throw new BusinessException(Code.ERROR,"注册失败");
         }
         else
         {
+            User userByUserName = userService.getUserByUserName(user.getUserName());
+            VipServiceImpl.UserList.put(userByUserName.getUid(),userByUserName);
             return ResultUtils.success("注册成功");
         }
 

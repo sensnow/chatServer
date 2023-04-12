@@ -63,4 +63,6 @@ public interface UserService extends IService<User> {
      */
     User getUserInfo(Integer uid);
 
+    Integer isAvailable(Integer uid);
+
 }

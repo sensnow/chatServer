@@ -20,7 +20,7 @@ public interface ChatGptService {
     Message getChat(List<Message> messages);
 
 
-    InputStream getChatStream(List<Message> messages);
+    InputStream getChatStream(List<Message> messages,boolean vip);
 
 
 

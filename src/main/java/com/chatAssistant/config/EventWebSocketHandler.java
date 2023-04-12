@@ -6,10 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.chatAssistant.domain.ChatMsg;
 import com.chatAssistant.domain.Message;
 import com.chatAssistant.domain.SearchLog;
-import com.chatAssistant.service.ChatGptService;
-import com.chatAssistant.service.ChatGptService2;
-import com.chatAssistant.service.ConversationLogService;
-import com.chatAssistant.service.SearchLogService;
+import com.chatAssistant.service.*;
 import com.chatAssistant.utils.JsonParseUtils;
 import com.chatAssistant.utils.MessageReduceUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,22 +33,20 @@ public class EventWebSocketHandler extends TextWebSocketHandler {
 
     private static ConversationLogService conversationLogService;
 
-
     private static SearchLogService searchLogService;
 
+    private static VipService vipService;
 
-    @Autowired
-    public void setChatGptService(){
-        EventWebSocketHandler.chatGptService = chatGptService;
-    }
 
     @Autowired
     public void setAttribute(ConversationLogService conversationLogService,
                              SearchLogService searchLogService,
-                             ChatGptService chatGptService){
+                             ChatGptService chatGptService,
+                             VipService vipService){
         EventWebSocketHandler.conversationLogService = conversationLogService;
         EventWebSocketHandler.searchLogService = searchLogService;
         EventWebSocketHandler.chatGptService = chatGptService;
+        EventWebSocketHandler.vipService = vipService;
     }
 
 
@@ -81,26 +76,31 @@ public class EventWebSocketHandler extends TextWebSocketHandler {
         if(messages.size()==0){
             return;
         }else if(messages.size()==1){
-            int i = searchLogService.setDescribe(searchId, messages.get(0).getContent());
+            String content = messages.get(0).getContent();
+            if(content.length()>10){
+                content = content.substring(0,10);
+            }
+            int i = searchLogService.setDescribe(searchId, content);
             if(i==0){
                 throw new RuntimeException("searchId不存在");
             }
         }
         try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(chatGptService.getChatStream(messages)));
+            boolean vip = vipService.isVip(searchId);
+            BufferedReader in = new BufferedReader(new InputStreamReader(chatGptService.getChatStream(messages,vip)));
             String inputLine = "";
-            StringBuilder content = new StringBuilder();
             while ((inputLine = in.readLine()) != null) {
-                content.append(inputLine);
-//                System.out.println(inputLine);
-                session.sendMessage(new TextMessage(inputLine));
+                try {
+                    session.sendMessage(new TextMessage(inputLine));
+                } catch (IOException e) {
+                    in.close();
+                }
             }
             in.close();
 //            session.close();
             if(!role.equals("assistant")){
                 conversationLogService.insert(messages.get(messages.size()-1),searchId);
             }
-            System.out.println(content);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -12,9 +12,6 @@ public interface UserMapper extends BaseMapper<User> {
     @Select("select * from user where user = #{userName} and password = #{password}")
     public User login(String userName, String password);
 
-    @ResultMap("UserResultMap")
-    @Select("select * from user where userName = #{userName}")
-    public User getUserByUserName(String userName);
 
     @ResultMap("UserResultMap")
     @Select("select * from user where uid = #{uid}")
@@ -28,7 +25,26 @@ public interface UserMapper extends BaseMapper<User> {
     @Insert("insert into user(userName,password) values(#{userName},#{password})")
     public int insertUser(String userName, String password);*/
 
+
+    @Select("select * from user where user_name = #{userName}")
+    User getUserByUserName(String userName);
+
+    @Select("select * from user where uid = #{uid}")
+    public User getUserByUid(long uid);
+
     @Select("select count(*) from user where user_name = #{userName}")
     public int checkUserName(String userName);
+
+    @Select("select * from user")
+    List<User> selectAll();
+
+    @Select("select is_available from user where uid = #{uid}")
+    Integer getIsAvailable(Integer uid);
+
+    @Select("select * from user where user_name = #{userName} and password = #{password} and is_available != 0")
+    User login(String userName, String password);
+
+    @Select("select user_name from user where uid = #{uid} and is_available != 0")
+    String getUserNameByUid(Integer uid);
 
 }

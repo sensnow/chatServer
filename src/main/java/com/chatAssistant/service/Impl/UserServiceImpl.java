@@ -32,7 +32,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         // 密码加密
         String encode = DigestUtils.md5DigestAsHex(password.getBytes());
-        User login = userMapper.selectOne(new QueryWrapper<User>().eq("user_name", userName).eq("password", encode));
+//        User login = userMapper.selectOne(new QueryWrapper<User>().eq("user_name", userName).eq("password", encode));
+        User login = userMapper.login(userName, encode);
         // 登录
         if(login != null) {
             StpUtil.login(login.getUid());
@@ -53,7 +54,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         // 密码加密
         String encode = DigestUtils.md5DigestAsHex(password.getBytes());
-        User user = new User(0,userName, encode, date);
+        User user = new User(0,userName, encode, date,4);
         int insert = userMapper.insert(user);
         return insert == 1;
     }
@@ -67,17 +68,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Override
     public User getUserByUserName(String userName) {
-        return userMapper.selectOne(new QueryWrapper<User>().eq("user_name", userName));
+//        return userMapper.selectOne(new QueryWrapper<User>().eq("user_name", userName));
+        return userMapper.getUserByUserName(userName);
     }
 
     @Override
     public User getUserByUid(Integer uid) {
-        return userMapper.selectById(uid);
+        return userMapper.getUserByUid(uid);
     }
 
     @Override
     public String getUserNameByUid(Integer uid) {
-        return userMapper.selectById(uid).getUserName();
+        return userMapper.getUserNameByUid(uid);
     }
 
     @Override
@@ -90,7 +92,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Override
     public User getUserInfo(Integer uid) {
-        return userMapper.selectById(uid);
+        return userMapper.getUserByUid(uid);
     }
+
+    @Override
+    public Integer isAvailable(Integer uid) {
+        return userMapper.getIsAvailable(uid);
+    }
+
 
 }
