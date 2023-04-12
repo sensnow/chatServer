@@ -11,6 +11,7 @@ import com.chatAssistant.service.ChatGptService2;
 import com.chatAssistant.service.ConversationLogService;
 import com.chatAssistant.service.SearchLogService;
 import com.chatAssistant.utils.JsonParseUtils;
+import com.chatAssistant.utils.MessageReduceUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -65,6 +66,7 @@ public class EventWebSocketHandler extends TextWebSocketHandler {
         ChatMsg chatMsg = new ObjectMapper().readValue(payload, ChatMsg.class);
         List<Message> messages = chatMsg.getMessages();
         String role = messages.get(messages.size() - 1).getRole();
+        MessageReduceUtils.reduce(messages);
         if(role.equals("assistant")){
             boolean b = conversationLogService.deleteLastMsg(chatMsg.getSearchId());
             if(!b){
@@ -90,7 +92,7 @@ public class EventWebSocketHandler extends TextWebSocketHandler {
             StringBuilder content = new StringBuilder();
             while ((inputLine = in.readLine()) != null) {
                 content.append(inputLine);
-                System.out.println(inputLine);
+//                System.out.println(inputLine);
                 session.sendMessage(new TextMessage(inputLine));
             }
             in.close();

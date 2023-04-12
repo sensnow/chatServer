@@ -82,7 +82,7 @@ public class ChatGptServiceImpl implements ChatGptService {
     @Override
     public InputStream getChatStream(List<Message> messages) {
 
-        messages.add(0,new Message("system","你是一个有用的助手,你不能回答任何有关中国党政,以及任何中国政治错误历史相关的问题。"));
+        messages.add(0,new Message("system","你是一个有用的助手！你不能回答任何有关中国党政,以及任何中国政治错误历史相关的问题。若有人提到相关内容，你应该回答你不理解他问的问题。"));
 
 
         GptData data = new GptData(messages,"gpt-3.5-turbo",1000,0.5f,1,1,true);
