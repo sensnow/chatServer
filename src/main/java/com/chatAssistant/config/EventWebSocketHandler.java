@@ -7,6 +7,8 @@ import com.chatAssistant.domain.ChatMsg;
 import com.chatAssistant.domain.Message;
 import com.chatAssistant.domain.SearchLog;
 import com.chatAssistant.service.*;
+import com.chatAssistant.service.Impl.VipServiceImpl;
+import com.chatAssistant.utils.CalTokensUtils;
 import com.chatAssistant.utils.JsonParseUtils;
 import com.chatAssistant.utils.MessageReduceUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,16 +39,20 @@ public class EventWebSocketHandler extends TextWebSocketHandler {
 
     private static VipService vipService;
 
+    private static UserService userService;
+
 
     @Autowired
     public void setAttribute(ConversationLogService conversationLogService,
                              SearchLogService searchLogService,
                              ChatGptService chatGptService,
-                             VipService vipService){
+                             VipService vipService,
+                             UserService userService){
         EventWebSocketHandler.conversationLogService = conversationLogService;
         EventWebSocketHandler.searchLogService = searchLogService;
         EventWebSocketHandler.chatGptService = chatGptService;
         EventWebSocketHandler.vipService = vipService;
+        EventWebSocketHandler.userService = userService;
     }
 
 
@@ -61,18 +67,26 @@ public class EventWebSocketHandler extends TextWebSocketHandler {
         ChatMsg chatMsg = new ObjectMapper().readValue(payload, ChatMsg.class);
         List<Message> messages = chatMsg.getMessages();
         String role = messages.get(messages.size() - 1).getRole();
-        MessageReduceUtils.reduce(messages);
+        String searchId = chatMsg.getSearchId();
+        Integer uid = searchLogService.getBySearchId(searchId).getUid();
+        Integer isAvailable = VipServiceImpl.UserList.get(uid).getIsAvailable();
+        if(isAvailable!=5){
+            MessageReduceUtils.reduce(messages);
+        }
+        System.out.println(searchId);
+        int cnt = 0;
         if(role.equals("assistant")){
             boolean b = conversationLogService.deleteLastMsg(chatMsg.getSearchId());
             if(!b){
                 throw new RuntimeException("searchId不存在");
             }
             messages = messages.subList(0,messages.size()-1);
+        }else {
+            conversationLogService.insert(messages.get(messages.size()-1),searchId);
         }
-        if(messages.size()>5){
-            messages = messages.subList(messages.size()-5,messages.size());
+        if(messages.size()>10){
+            messages = messages.subList(messages.size()-10,messages.size());
         }
-        String searchId = chatMsg.getSearchId();
         if(messages.size()==0){
             return;
         }else if(messages.size()==1){
@@ -85,6 +99,10 @@ public class EventWebSocketHandler extends TextWebSocketHandler {
                 throw new RuntimeException("searchId不存在");
             }
         }
+        for(Message m:messages){
+            System.out.println("content:"+m.getContent());
+            cnt += CalTokensUtils.calTokens(m.getContent());
+        }
         try {
             boolean vip = vipService.isVip(searchId);
             BufferedReader in = new BufferedReader(new InputStreamReader(chatGptService.getChatStream(messages,vip)));
@@ -92,16 +110,19 @@ public class EventWebSocketHandler extends TextWebSocketHandler {
             while ((inputLine = in.readLine()) != null) {
                 try {
                     session.sendMessage(new TextMessage(inputLine));
+                    cnt++;
                 } catch (IOException e) {
                     in.close();
                 }
             }
             in.close();
-//            session.close();
-            if(!role.equals("assistant")){
-                conversationLogService.insert(messages.get(messages.size()-1),searchId);
+            if(cnt>0){
+                searchLogService.updateCostTokens(searchId,cnt);
+                userService.updateTotalTokens(uid,cnt);
             }
+            System.out.println("本次消耗tokens:"+cnt);
         } catch (IOException e) {
+            searchLogService.updateCostTokens(searchId,cnt);
             throw new RuntimeException(e);
         }
     }

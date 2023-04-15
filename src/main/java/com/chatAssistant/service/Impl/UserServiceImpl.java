@@ -100,5 +100,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return userMapper.getIsAvailable(uid);
     }
 
+    @Override
+    public Integer updateTotalTokens(Integer uid, Integer totalTokens) {
+        return userMapper.updateTotalTokens(uid, totalTokens);
+    }
+
 
 }

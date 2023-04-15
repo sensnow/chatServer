@@ -23,8 +23,4 @@ public class WebSocketConfig implements WebSocketConfigurer {
                 .addInterceptors(interceptor);
     }
 
-//    @Bean
-//    public EventWebSocketHandler eventWebSocketHandler() {
-//        return new EventWebSocketHandler();
-//    }
 }

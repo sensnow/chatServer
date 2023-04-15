@@ -40,6 +40,9 @@ public interface SearchLogMapper extends BaseMapper<SearchLog> {
 
     @Delete("delete from search_log where uid=#{uid}")
     int deleteByUid(Integer uid);
+
+    @Update("update search_log set cost_tokens = cost_tokens + #{costTokens} where search_id = #{searchId}")
+    int updateCostTokens(String searchId, Integer costTokens);
 }
 
 

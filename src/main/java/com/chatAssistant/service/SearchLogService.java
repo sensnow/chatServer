@@ -33,4 +33,6 @@ public interface SearchLogService extends IService<SearchLog> {
         int setDescribe(String searchId,String describe);
 
         int deleteByUid(Integer uid);
+
+        boolean updateCostTokens(String searchId, Integer costTokens);
 }

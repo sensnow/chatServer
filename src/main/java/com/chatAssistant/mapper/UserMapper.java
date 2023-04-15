@@ -47,4 +47,7 @@ public interface UserMapper extends BaseMapper<User> {
     @Select("select user_name from user where uid = #{uid} and is_available != 0")
     String getUserNameByUid(Integer uid);
 
+    @Update("update user set total_tokens = total_tokens + #{totalTokens} where uid = #{uid}")
+    int updateTotalTokens(Integer uid, Integer totalTokens);
+
 }

@@ -69,6 +69,11 @@ public class SearchLogServiceImpl extends ServiceImpl<SearchLogMapper, SearchLog
         return searchLogMapper.deleteByUid(uid);
     }
 
+    @Override
+    public boolean updateCostTokens(String searchId, Integer costTokens) {
+        return searchLogMapper.updateCostTokens(searchId, costTokens) == 1;
+    }
+
 
 }
 

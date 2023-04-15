@@ -65,4 +65,6 @@ public interface UserService extends IService<User> {
 
     Integer isAvailable(Integer uid);
 
+    Integer updateTotalTokens(Integer uid, Integer totalTokens);
+
 }
