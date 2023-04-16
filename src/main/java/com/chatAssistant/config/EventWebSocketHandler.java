@@ -123,6 +123,7 @@ public class EventWebSocketHandler extends TextWebSocketHandler {
             System.out.println("本次消耗tokens:"+cnt);
         } catch (IOException e) {
             searchLogService.updateCostTokens(searchId,cnt);
+            userService.updateTotalTokens(uid,cnt);
             throw new RuntimeException(e);
         }
     }
